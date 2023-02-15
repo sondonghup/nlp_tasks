@@ -7,3 +7,5 @@ def get_result(inputs):
     doc = nlp(inputs)
     for entity in doc.ents:
         result.append([entity.text, entity.label_])
+
+    return result

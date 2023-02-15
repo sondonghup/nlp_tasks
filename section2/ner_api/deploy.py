@@ -1,23 +1,23 @@
 import uvicorn
-import os
 from typing import List, Union
 import sys
 import os
+import json
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from logger import get_logger
 from argparse import ArgumentParser
-from model.nltk_ner import get_result
+from model.spacy_ner import get_result
 
 class Inputs(BaseModel):
     nickName: str = "acer"
-    modelName: str = "nltk_ner"
+    modelName: str = "spacy_ner"
     user_input: str = "please input eng sentence"
 
 description = """
-# nltk ner model
+# spacy ner model
 
 
 
@@ -25,32 +25,41 @@ description = """
 
 tags_metadata = [
     {
-        "name" : "nltk_ner",
+        "name" : "spacy_ner",
         "description" : "eng_ner"
     }
 ]
 
 app = FastAPI(
-    title = "nltk ner api",
+    title = "spacy ner api",
     description = description
 )
 
-@app.post("/acer-lab", tags=["ner"])
+@app.post("/acer-lab/ner", tags=["ner"])
 def ner(inputs: Inputs):
     try:
-        print(inputs.user_input)
-
-        logger.info(f"User Inputs : {inputs.user_input}")
         input = inputs.user_input
         target_output = get_result(input)
-        ner_output = 
+        error = None
 
-    except:
-        pass
+        result = {
+            "inputs" : inputs.user_input,
+            "ner" : target_output
+        }
+
+
+    except Exception as e:
+        result = None
+        error = str(e)
+    
+    return {
+        "result" : result,
+        "error" : error
+    }
 
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--config", default = 'config/v0.0.1-ner.json')
     parse = parser.parse_args()
-    target_tokenizer, target_models
-/bespin-global/klue-roberta-base-ner/blob/main/vocab.txt
+    cfg_path = parse.config
+    config = json.load(open(cfg_path, encoding="utf-8"))

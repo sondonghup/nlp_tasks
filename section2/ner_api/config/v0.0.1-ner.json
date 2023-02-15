@@ -1,0 +1,4 @@
+{
+    "deploy_port": 8000,
+    "log_dir": "./logs/acer-lab-ner-v.0.0.1"
+  }
